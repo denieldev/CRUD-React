@@ -20,6 +20,27 @@ const App = () => {
   const [data, setData] = useState([]);
   const [dataEdit, setDataEdit] = useState({});
 
+  const isMobile = useBreakpointValue({
+    base: true,
+    lg: false,
+  });
+
+  useEffect(() => {
+    const db_costumer = localStorage.getItem("cad_cliente")
+    ? JSON.parse(localStorage.getItem("cad_cliente"))
+    : [];
+
+    setData(db_costumer);
+  }, [setData]);
+
+  const handleRemove = (email) => {
+    const newArray = data.filter((item) => item.email !== email);
+
+    setData(newArray);
+
+    localStorage.setItem("cad_cliente", JSON.stringify(newArray));
+  };
+
   return (
     <Flex
     h="100vh"
@@ -41,14 +62,14 @@ const App = () => {
                   Nome
                 </Th>
                 <Th maxW={isMobile ? 5 : 100} fontSize="20px">
-                  E-mail
+                  E-mail     
                 </Th>
                 <Th p={0}></Th>
                 <Th p={0}></Th>
               </Tr>
             </Thead>
             <Tbody>
-              {data.map (({ nome, email }, index) => (
+              {data.map (({ name, email }, index) => (
                 <Tr key={index} cursor="pointer" _hover={{bg: "gray.100"}}>
                     <Td maxW={isMobile ? 5 : 100}>{name}</Td>
                     <Td maxW={isMobile ? 5 : 100}>{email}</Td>
